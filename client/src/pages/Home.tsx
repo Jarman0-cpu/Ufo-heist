@@ -9,6 +9,7 @@ import eiffelImage from "@assets/generated_images/eiffel_tower_floating_in_a_zer
 import libertyImage from "@assets/generated_images/statue_of_liberty_floating_in_a_zero-gravity_space_bubble,_playful_vector_style.png";
 import { TractorBeamCursor } from "@/components/TractorBeamCursor";
 import { RansomNoteGenerator } from "@/components/RansomNoteGenerator";
+import { FloatingCows } from "@/components/FloatingCows";
 
 export default function Home() {
   // Since we don't know the exact filename yet, we'll use a variable that we can patch or standard import
@@ -29,6 +30,7 @@ export default function Home() {
   return (
     <div className="min-h-screen relative overflow-hidden selection:bg-primary selection:text-primary-foreground cursor-none">
       <TractorBeamCursor />
+      <FloatingCows />
       
       {/* Starry Background Elements */}
       <div className="fixed inset-0 z-0 opacity-50 pointer-events-none">

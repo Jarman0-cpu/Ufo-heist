@@ -34,3 +34,9 @@ export const insertSightingSchema = createInsertSchema(sightings).omit({
 
 export type InsertSighting = z.infer<typeof insertSightingSchema>;
 export type Sighting = typeof sightings.$inferSelect;
+
+export const pageViews = pgTable("page_views", {
+  id: serial("id").primaryKey(),
+  timestamp: timestamp("timestamp").defaultNow().notNull(),
+  page: text("page").notNull(),
+});

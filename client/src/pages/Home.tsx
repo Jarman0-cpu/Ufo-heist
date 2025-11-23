@@ -12,9 +12,18 @@ import { RansomNoteGenerator } from "@/components/RansomNoteGenerator";
 import { FloatingCows } from "@/components/FloatingCows";
 import { SightingReportDialog } from "@/components/SightingReportDialog";
 import { SightingsFeed } from "@/components/SightingsFeed";
+import { StatsPanel } from "@/components/StatsPanel";
 
 export default function Home() {
   const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    fetch("/api/page-view", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ page: "/" }),
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +37,7 @@ export default function Home() {
     <div className="min-h-screen relative overflow-hidden selection:bg-primary selection:text-primary-foreground cursor-none">
       <TractorBeamCursor />
       <FloatingCows />
+      <StatsPanel />
       
       {/* Starry Background Elements */}
       <div className="fixed inset-0 z-0 opacity-50 pointer-events-none">

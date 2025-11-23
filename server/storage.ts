@@ -1,6 +1,6 @@
-import { type User, type InsertUser, type Sighting, type InsertSighting, users, sightings } from "@shared/schema";
+import { type User, type InsertUser, type Sighting, type InsertSighting, users, sightings, pageViews } from "@shared/schema";
 import { db } from "./db";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, sql, count } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
@@ -9,6 +9,12 @@ export interface IStorage {
   
   getSightings(limit?: number): Promise<Sighting[]>;
   createSighting(sighting: InsertSighting): Promise<Sighting>;
+  
+  recordPageView(page: string): Promise<void>;
+  getStats(): Promise<{
+    totalViews: number;
+    totalSightings: number;
+  }>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -34,6 +40,20 @@ export class DatabaseStorage implements IStorage {
   async createSighting(insertSighting: InsertSighting): Promise<Sighting> {
     const [sighting] = await db.insert(sightings).values(insertSighting).returning();
     return sighting;
+  }
+
+  async recordPageView(page: string): Promise<void> {
+    await db.insert(pageViews).values({ page });
+  }
+
+  async getStats(): Promise<{ totalViews: number; totalSightings: number }> {
+    const [viewsResult] = await db.select({ count: count() }).from(pageViews);
+    const [sightingsResult] = await db.select({ count: count() }).from(sightings);
+    
+    return {
+      totalViews: viewsResult?.count || 0,
+      totalSightings: sightingsResult?.count || 0,
+    };
   }
 }
 

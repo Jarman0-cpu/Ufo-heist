@@ -6,6 +6,29 @@ import { fromError } from "zod-validation-error";
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
+  // Record page view
+  app.post("/api/page-view", async (req, res) => {
+    try {
+      const page = req.body.page || "/";
+      await storage.recordPageView(page);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error recording page view:", error);
+      res.status(500).json({ error: "Failed to record page view" });
+    }
+  });
+
+  // Get stats
+  app.get("/api/stats", async (req, res) => {
+    try {
+      const stats = await storage.getStats();
+      res.json(stats);
+    } catch (error) {
+      console.error("Error fetching stats:", error);
+      res.status(500).json({ error: "Failed to fetch stats" });
+    }
+  });
+  
   // Get recent sightings
   app.get("/api/sightings", async (req, res) => {
     try {

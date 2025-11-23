@@ -10,13 +10,10 @@ import libertyImage from "@assets/generated_images/statue_of_liberty_floating_in
 import { TractorBeamCursor } from "@/components/TractorBeamCursor";
 import { RansomNoteGenerator } from "@/components/RansomNoteGenerator";
 import { FloatingCows } from "@/components/FloatingCows";
+import { SightingReportDialog } from "@/components/SightingReportDialog";
+import { SightingsFeed } from "@/components/SightingsFeed";
 
 export default function Home() {
-  // Since we don't know the exact filename yet, we'll use a variable that we can patch or standard import
-  // For now, I'll assume the image generation works and returns a path I can reference, 
-  // but typically I'd need to see the tool output. 
-  // I'll use a placeholder if the import fails in a real scenario, but for this mockup code:
-  
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -58,13 +55,15 @@ export default function Home() {
             <span className="font-sans font-bold text-xl tracking-tighter">THEFT<span className="text-primary">.GALACTIC</span></span>
           </div>
           <div className="hidden md:flex items-center gap-8">
-            <a href="#" className="text-sm font-medium hover:text-primary transition-colors">Missing Monuments</a>
-            <a href="#" className="text-sm font-medium hover:text-primary transition-colors">Ransom Demands</a>
-            <a href="#" className="text-sm font-medium hover:text-primary transition-colors">Witness Reports</a>
+            <a href="#collection" className="text-sm font-medium hover:text-primary transition-colors">Missing Monuments</a>
+            <a href="#ransom" className="text-sm font-medium hover:text-primary transition-colors">Ransom Demands</a>
+            <a href="#sightings" className="text-sm font-medium hover:text-primary transition-colors">Witness Reports</a>
           </div>
-          <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-mono text-xs uppercase">
-            Report Sighting
-          </Button>
+          <SightingReportDialog>
+            <Button variant="outline" className="border-primary text-primary hover:bg-primary hover:text-primary-foreground font-mono text-xs uppercase" data-testid="button-open-report">
+              Report Sighting
+            </Button>
+          </SightingReportDialog>
         </div>
       </nav>
 
@@ -92,9 +91,11 @@ export default function Home() {
             </p>
 
             <div className="flex flex-wrap gap-4 pt-4">
-              <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold h-14 px-8 rounded-2xl">
-                Join Rescue Mission
-              </Button>
+              <SightingReportDialog>
+                <Button size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 font-bold h-14 px-8 rounded-2xl" data-testid="button-hero-report">
+                  Join Rescue Mission
+                </Button>
+              </SightingReportDialog>
               <Button size="lg" variant="ghost" className="text-white hover:bg-white/10 h-14 px-8 rounded-2xl">
                 Read Manifesto
               </Button>
@@ -154,7 +155,7 @@ export default function Home() {
       </section>
 
       {/* Collection Gallery Section */}
-      <section className="py-24 container mx-auto px-6">
+      <section id="collection" className="py-24 container mx-auto px-6">
         <div className="text-center mb-16 space-y-4">
           <Badge variant="outline" className="border-accent/50 text-accent bg-accent/10 px-4 py-1 rounded-full font-mono text-xs">
             THE COLLECTION
@@ -217,7 +218,7 @@ export default function Home() {
       </section>
 
       {/* Ransom Note Section */}
-      <section className="py-24 bg-secondary/5 border-y border-secondary/10 relative">
+      <section id="ransom" className="py-24 bg-secondary/5 border-y border-secondary/10 relative">
         <div className="container mx-auto px-6">
           <div className="mb-12 text-center">
              <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4">Make Your Demands</h2>
@@ -258,10 +259,12 @@ export default function Home() {
                 </Card>
               </div>
 
-              <Button className="w-full bg-secondary text-white hover:bg-secondary/90 font-bold py-6">
-                <AlertTriangle className="mr-2 w-5 h-5" />
-                REPORT A SIGHTING
-              </Button>
+              <SightingReportDialog>
+                <Button className="w-full bg-secondary text-white hover:bg-secondary/90 font-bold py-6" data-testid="button-poster-report">
+                  <AlertTriangle className="mr-2 w-5 h-5" />
+                  REPORT A SIGHTING
+                </Button>
+              </SightingReportDialog>
             </div>
 
             <div className="relative border-2 border-dashed border-white/20 rounded-xl p-4 flex items-center justify-center bg-black/20 min-h-[300px]">
@@ -274,6 +277,24 @@ export default function Home() {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent animate-scan pointer-events-none" />
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Live Sightings Feed */}
+      <section id="sightings" className="py-24 container mx-auto px-6">
+        <div className="text-center mb-16 space-y-4">
+          <Badge variant="outline" className="border-primary/50 text-primary bg-primary/10 px-4 py-1 rounded-full font-mono text-xs">
+            <span className="w-2 h-2 bg-red-500 rounded-full animate-pulse inline-block mr-2" />
+            LIVE FEED
+          </Badge>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold">Witness Reports</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Real-time sightings from concerned citizens across the galaxy.
+          </p>
+        </div>
+        
+        <div className="max-w-3xl mx-auto">
+          <SightingsFeed />
         </div>
       </section>
 

@@ -3,8 +3,12 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Zap, AlertTriangle, Globe, MapPin, Clock, ArrowUp } from "lucide-react";
+import { Zap, AlertTriangle, Globe, MapPin, Clock, ArrowUp, Rocket, Star } from "lucide-react";
 import ufoImage from "@assets/generated_images/ufo_stealing_big_ben_in_a_playful_vector_style.png";
+import eiffelImage from "@assets/generated_images/eiffel_tower_floating_in_a_zero-gravity_space_bubble,_playful_vector_style.png";
+import libertyImage from "@assets/generated_images/statue_of_liberty_floating_in_a_zero-gravity_space_bubble,_playful_vector_style.png";
+import { TractorBeamCursor } from "@/components/TractorBeamCursor";
+import { RansomNoteGenerator } from "@/components/RansomNoteGenerator";
 
 export default function Home() {
   // Since we don't know the exact filename yet, we'll use a variable that we can patch or standard import
@@ -23,7 +27,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen relative overflow-hidden selection:bg-primary selection:text-primary-foreground">
+    <div className="min-h-screen relative overflow-hidden selection:bg-primary selection:text-primary-foreground cursor-none">
+      <TractorBeamCursor />
       
       {/* Starry Background Elements */}
       <div className="fixed inset-0 z-0 opacity-50 pointer-events-none">
@@ -136,13 +141,87 @@ export default function Home() {
               { label: "Panic Level", value: "CRITICAL", icon: AlertTriangle },
               { label: "Current Altitude", value: "400km", icon: Globe },
             ].map((stat, i) => (
-              <div key={i} className="text-center space-y-2 p-4 rounded-xl hover:bg-white/5 transition-colors cursor-crosshair group">
+              <div key={i} className="text-center space-y-2 p-4 rounded-xl hover:bg-white/5 transition-colors cursor-none group">
                 <stat.icon className="w-6 h-6 mx-auto text-muted-foreground group-hover:text-primary transition-colors mb-4" />
                 <div className="text-3xl md:text-4xl font-bold font-mono tracking-tighter">{stat.value}</div>
                 <div className="text-xs uppercase tracking-widest text-muted-foreground">{stat.label}</div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Collection Gallery Section */}
+      <section className="py-24 container mx-auto px-6">
+        <div className="text-center mb-16 space-y-4">
+          <Badge variant="outline" className="border-accent/50 text-accent bg-accent/10 px-4 py-1 rounded-full font-mono text-xs">
+            THE COLLECTION
+          </Badge>
+          <h2 className="font-serif text-4xl md:text-5xl font-bold">Previous Acquisitions</h2>
+          <p className="text-muted-foreground max-w-xl mx-auto">
+            Our intergalactic museum is growing. Viewing is mandatory for all Earthlings.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-2 gap-12">
+           {[
+             { 
+               name: "La Tour Eiffel", 
+               location: "Paris, FR", 
+               status: "CONTAINED",
+               img: eiffelImage
+             },
+             { 
+               name: "Lady Liberty", 
+               location: "New York, USA", 
+               status: "PROCESSING",
+               img: libertyImage
+             }
+           ].map((item, i) => (
+             <motion.div 
+               key={i}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ delay: i * 0.2 }}
+               className="group relative aspect-square rounded-[2.5rem] overflow-hidden border border-white/10 bg-black/40"
+             >
+               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10" />
+               
+               <img 
+                 src={item.img} 
+                 alt={item.name}
+                 className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700"
+               />
+               
+               <div className="absolute bottom-0 left-0 right-0 p-8 z-20">
+                 <div className="flex justify-between items-end">
+                   <div>
+                     <div className="text-accent font-mono text-xs mb-2 flex items-center gap-2">
+                        <span className="w-2 h-2 bg-accent rounded-full animate-pulse"/>
+                        {item.status}
+                     </div>
+                     <h3 className="text-3xl font-bold mb-1">{item.name}</h3>
+                     <p className="text-muted-foreground font-mono text-sm">{item.location}</p>
+                   </div>
+                   <Button size="icon" className="rounded-full w-12 h-12 bg-white/10 hover:bg-primary hover:text-black transition-all border border-white/20">
+                     <Rocket className="w-5 h-5" />
+                   </Button>
+                 </div>
+               </div>
+             </motion.div>
+           ))}
+        </div>
+      </section>
+
+      {/* Ransom Note Section */}
+      <section className="py-24 bg-secondary/5 border-y border-secondary/10 relative">
+        <div className="container mx-auto px-6">
+          <div className="mb-12 text-center">
+             <h2 className="font-serif text-4xl md:text-5xl font-bold mb-4">Make Your Demands</h2>
+             <p className="text-muted-foreground">Negotiate the release of your beloved monuments.</p>
+          </div>
+          <RansomNoteGenerator />
         </div>
       </section>
 
